@@ -1,0 +1,49 @@
+@model ECommerceCsvImport.Models.ProductsIndexViewModel
+@{
+    ViewData["Title"] = "Список товаров";
+}
+
+<h1>Товары на складе</h1>
+<p>Всего товаров: <strong>@Model.TotalCount</strong></p>
+<p>Общая стоимость: <strong>@Model.TotalValue.ToString("N0") RUB</strong></p>
+
+@if (Model.Products.Count == 0)
+{
+    <div class="alert alert-info mt-3">
+        Товары еще не импортированы. Перейдите на страницу импорта.
+    </div>
+    <a asp-action="Import" class="btn btn-primary">Импортировать товары</a>
+}
+else
+{
+    <table class="table table-bordered table-striped mt-3">
+        <thead>
+            <tr>
+                <th>Артикул</th>
+                <th>Название</th>
+                <th>Цена</th>
+                <th>Категория</th>
+                <th>Остаток</th>
+                <th>Активен</th>
+                <th>Бренд</th>
+                <th>Гарантия</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var product in Model.Products)
+            {
+                <tr>
+                    <td>@product.Sku</td>
+                    <td>@product.Name</td>
+                    <td>@product.Price.ToString("N0") @product.Currency</td>
+                    <td>@product.CategoryName</td>
+                    <td>@product.StockQuantity</td>
+                    <td>@(product.IsActive ? "Да" : "Нет")</td>
+                    <td>@product.Brand</td>
+                    <td>@product.WarrantyMonths мес.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <a asp-action="Import" class="btn btn-primary mt-3">Импортировать еще</a>
+}
